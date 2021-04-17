@@ -26,6 +26,8 @@ export default function PaginationRounded(props: Props) {
 
   return (
     <div className={classes.root}>
+      {console.log(props.totalItems)}
+      {console.log(props.page)}
       <Pagination
         count={Math.ceil(props.totalItems / props.resultsPerPage)}
         shape="rounded"

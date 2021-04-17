@@ -1,6 +1,7 @@
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import homeMainImg from "./homeComponents/main-home.jpg";
+import homeMainImg from "./assets/main-home.jpg";
+import videoBackground from "./assets/video-background.mp4";
 import HomeIntro from "./HomeIntro";
 import HomeCards from "./HomeCards";
 
@@ -79,7 +80,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Home() {
   const classes = useStyles();
   return (
-    <>
+    <div>
       <div className={classes.root}>
         <div className={classes.image}>
           <span
@@ -102,27 +103,13 @@ export default function Home() {
               color="inherit"
               className={classes.imageSubTitle}
             >
-              Our coffee speaks for itself
+              Fresh, Fluid Bed Roasting
             </Typography>
           </span>
         </div>
       </div>
       <HomeIntro />
-      <div className={classes.safetyContainer}>
-        <Typography variant="h5" className={classes.safetyTitle} gutterBottom>
-          COVID-19 Safety
-        </Typography>
-        <div className={classes.safetyBody}>
-          <Typography variant="body2" align="center">
-            These are interesting times we are in. Please know, the roastery is
-            sanitized. Only I touch the equipment and your beans. I wash my
-            hands frequently and vigourously. And yes, you can order online.
-            Contact via email for at-roastery pick up and we can connect.
-            Updates regularly. Thanks and be safe.
-          </Typography>
-        </div>
-      </div>
       <HomeCards />
-    </>
+    </div>
   );
 }

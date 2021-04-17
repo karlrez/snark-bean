@@ -1,15 +1,14 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useMutation, gql } from "@apollo/client";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import Box from "@material-ui/core/Box";
 import CustomAlert from "../../../common/CustomAlert";
 
 const useStyles = makeStyles((theme) => ({
@@ -39,15 +38,15 @@ const useStyles = makeStyles((theme) => ({
   },
   errorMessage: {
     color: "#c62828",
-    fontSize: 13,
     paddingLeft: "240px",
   },
-  infoMessage: {
+  reqMessage: {
     marginTop: theme.spacing(1.5),
   },
 }));
 
 type FormInputs = {
+  //the expected structure of the form values
   firstName: string;
   lastName: string;
   company: string;
@@ -58,7 +57,6 @@ type FormInputs = {
   province: string;
   pzCode: string;
   phone: string;
-  addressDefault: boolean;
 };
 
 type NewAddress = {
@@ -83,12 +81,14 @@ interface CustomerUserErrors {
 }
 
 interface CreateCustomerAddress {
+  //the expected structure of the response
   customerAddressCreate: {
     customerAddress: CustomerAddress;
     customerUserErrors: CustomerUserErrors[];
   };
 }
 
+//define a mutation for creating a new address
 export const CREATE_NEW_ADDRESS = gql`
   mutation customerAddressCreate(
     $customerAccessToken: String!
@@ -112,15 +112,28 @@ export default function ContactForm() {
   const classes = useStyles();
   const [createAddress, { data }] = useMutation<
     CreateCustomerAddress,
-    { customerAccessToken: string; address: NewAddress }
+    { customerAccessToken: string; address: NewAddress } //pass in expected $customerAccessToken: String! $address: MailingAddressInput! arguments to apollo hook
   >(CREATE_NEW_ADDRESS);
+
+  const notify = () =>
+    toast.info("Thank you! Your address was successfully updated.", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+
   const {
     register,
     handleSubmit,
+    reset,
     errors: validationErrors,
   } = useForm<FormInputs>();
 
-  const handleSend: SubmitHandler<FormInputs> = async (
+  const handleAdd: SubmitHandler<FormInputs> = async (
     formValues: FormInputs
   ) => {
     const {
@@ -134,12 +147,12 @@ export default function ContactForm() {
       province,
       pzCode,
       phone,
-      addressDefault,
     } = formValues; //use object destructuring to access user's data input
+    //Execute a function for creating a new address
+    const token = JSON.parse(localStorage.getItem("token") as any).accessToken;
     createAddress({
       variables: {
-        customerAccessToken: JSON.parse(localStorage.getItem("token") as any)
-          .accessToken,
+        customerAccessToken: token,
         address: {
           firstName,
           lastName,
@@ -159,22 +172,49 @@ export default function ContactForm() {
   useEffect(() => {
     if (data && data.customerAddressCreate.customerUserErrors.length === 0) {
       (async () => {
-        console.log("HERE ", data.customerAddressCreate.customerAddress);
+        reset();
+        notify();
       })();
     }
-  }, [data]);
+  }, [data, reset]);
 
   return (
     <Container component="main" maxWidth="sm">
-      <div className={classes.infoMessage}>
-        <CustomAlert
-          title={"Add a new Address"}
-          content={"Please fill out this form to add a new address."}
-          type={"i"}
-        />
-      </div>
+      {!data && (
+        <div className={classes.reqMessage}>
+          <CustomAlert
+            title={"Add a new Address"}
+            content={"Please fill out this form to add a new address."}
+            type={"i"}
+          />
+        </div>
+      )}
+      {data && data.customerAddressCreate.customerUserErrors.length > 0 && (
+        <div className={classes.reqMessage}>
+          <CustomAlert
+            title={"Error"}
+            content={
+              data.customerAddressCreate.customerUserErrors[0].code === "TAKEN"
+                ? "This address already exisits in our records."
+                : "We've encountered an error while attempting to add this address."
+            }
+            type={"e"}
+          />
+        </div>
+      )}
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <div className={classes.root}>
-        <form className={classes.form} onSubmit={handleSubmit(handleSend)}>
+        <form className={classes.form} onSubmit={handleSubmit(handleAdd)}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -359,7 +399,7 @@ export default function ContactForm() {
             required
             size="small"
             fullWidth
-            label="Phone (e.g. 555 555 5555)"
+            label="Phone (e.g. 5555555555)"
             name={"phone"}
             inputRef={register({
               pattern: new RegExp(/^\d{10}$/),
@@ -381,14 +421,6 @@ export default function ContactForm() {
                 Incorrect phone number format
               </Typography>
             )}
-
-          <Box className={classes.controlText}>
-            <FormControlLabel
-              control={<Checkbox name="addressDefault" inputRef={register} />}
-              className={classes.formControl}
-              label="Set as default address"
-            />
-          </Box>
 
           <Button
             type="submit"

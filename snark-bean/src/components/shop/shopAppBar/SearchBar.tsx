@@ -46,6 +46,10 @@ const useStyles = makeStyles((theme: Theme) =>
         },
       },
     },
+    searchBarItem: {
+      float: "left",
+      maxWidth: "40%",
+    },
   })
 );
 
@@ -59,17 +63,21 @@ export default function SearchBar(props: Props) {
   return (
     <>
       <div className={classes.search}>
-        <SearchIcon />
+        <div className={classes.searchBarItem}>
+          <SearchIcon />
+        </div>
 
-        <InputBase
-          placeholder="Search…"
-          classes={{
-            root: classes.inputRoot,
-            input: classes.inputInput,
-          }}
-          inputProps={{ "aria-label": "search" }}
-          onChange={(event) => props.setSearchInput(event.target.value)}
-        />
+        <div className={classes.searchBarItem}>
+          <InputBase
+            placeholder="Search…"
+            classes={{
+              root: classes.inputRoot,
+              input: classes.inputInput,
+            }}
+            inputProps={{ "aria-label": "search" }}
+            onChange={(event) => props.setSearchInput(event.target.value)}
+          />
+        </div>
       </div>
     </>
   );

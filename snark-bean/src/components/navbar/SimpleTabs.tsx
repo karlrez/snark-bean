@@ -61,7 +61,6 @@ export default function SimpleTabs() {
 
   useEffect(() => {
     // Ensures the correct tab is selected on page refresh
-    console.log(location.pathname);
     switch (location.pathname) {
       case "/home":
         setValue(0);
@@ -150,7 +149,6 @@ export default function SimpleTabs() {
             to="/signIn"
             className={classes.loginTab}
           />
-          {/*TODO: Increment counter when adding cart item*/}
           <LinkTab
             icon={
               <Badge badgeContent={numCartItems} color="error">

@@ -51,10 +51,10 @@ export default function ContactForm() {
 
   const sendEmail = (formValues: FormInputs) =>
     emailjs.send(
-      "service_43mnxpv",
-      "template_8iiod0k",
+      "put new serviceID here",
+      "put new templateID here",
       formValues,
-      "user_hiz6rjoaUCZmnDtrnExmO"
+      "put new userID here"
     );
 
   const notify = () =>

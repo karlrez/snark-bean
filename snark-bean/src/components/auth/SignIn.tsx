@@ -40,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
   linksContainer: {
     display: "flex",
     justifyContent: "space-between",
+    marginBottom: theme.spacing(2.5),
   },
   form: {
     width: "100%", // Fix IE 11 issue.
@@ -50,7 +51,6 @@ const useStyles = makeStyles((theme) => ({
   },
   errorMessage: {
     color: "#c62828",
-    fontSize: 12,
     paddingLeft: "240px",
   },
   link: {
@@ -79,7 +79,7 @@ export default function SignIn() {
 
   const [createToken, { data }] = useMutation<
     CreateToken,
-    { input: CreateTokenInput }
+    { input: CreateTokenInput } //define expected $input: CustomerAccessTokenCreateInput! argument to apollo hook
   >(CREATE_TOKEN);
 
   const {
@@ -94,7 +94,7 @@ export default function SignIn() {
     const { email, password } = formValues; //use object destructuring to access user's data input
     createToken({
       variables: {
-        input: { email, password },
+        input: { email, password }, //pass in expected $input: CustomerAccessTokenCreateInput! argument to apollo hook
       },
     });
   };
@@ -102,6 +102,7 @@ export default function SignIn() {
   useTokenValidate("/myAccount"); // redirect to to myAccount if token exists
 
   useEffect(() => {
+    //confirm successful request, by checking for absence of error codes in response
     if (
       data &&
       data.customerAccessTokenCreate.customerUserErrors.length === 0
@@ -110,12 +111,12 @@ export default function SignIn() {
         const {
           accessToken,
           expiresAt,
-        } = data.customerAccessTokenCreate.customerAccessToken;
+        } = data.customerAccessTokenCreate.customerAccessToken; //extract newly created token and its corresponding expiry date, from the response
         localStorage.setItem(
           "token",
           JSON.stringify({ accessToken, expiresAt }) // store token and token expiry in local storage
         );
-        history.push("/myAccount");
+        history.push("/myAccount"); //redirect user to their Account page
       })();
     }
   }, [history, data]);
@@ -123,6 +124,7 @@ export default function SignIn() {
   return (
     <Container component="main" maxWidth="sm">
       <div className={classes.root}>
+        {/*Conditionally Display error message if Sign In request unsuccessful */}
         {data &&
           data.customerAccessTokenCreate.customerUserErrors.length > 0 && (
             <CustomAlert
@@ -135,6 +137,7 @@ export default function SignIn() {
           )}
         {showSignInMsg && showSignInMsg.rerouteToSignIn && (
           <div className={classes.signInMsg}>
+            {/*Conditionally Display success message if sign in request successful */}
             <CustomAlert
               title={"Sign In"}
               content={
@@ -193,7 +196,7 @@ export default function SignIn() {
             type="password"
             name={"password"}
             inputRef={register({
-              pattern: new RegExp("^[a-zA-Z0-9]{3,10}$"),
+              pattern: new RegExp("^[a-zA-Z0-9]{3,10}$"), //TODO: Allow special characters, not just letters and numbers
             })}
           />
 
@@ -205,7 +208,7 @@ export default function SignIn() {
               </Typography>
             )}
 
-          {/*Display error message for incorrectly formatted password*/}
+          {/*Display error message for incorrectly formatted Password*/}
           {validationErrors.password &&
             validationErrors.password.type === "pattern" && (
               <Typography className={classes.errorMessage}>

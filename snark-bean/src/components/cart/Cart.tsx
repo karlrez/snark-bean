@@ -251,6 +251,7 @@ export default function InsetDividers() {
 
   return (
     <div>
+      {console.log(contextCart)}
       <Redirect to={redirect ? redirect : "/cart"} />
 
       <Typography className={classes.title} variant="h2">

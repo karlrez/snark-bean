@@ -1,11 +1,16 @@
 .footer {
   background: #000;
   padding: 2%;
-  margin-top: 45px;
+  /* position: fixed; */
+  bottom: 0;
+  width: 100%;
+  margin-top: 4%;
   position: relative;
 }
 .text-center h4 {
   color: #dbc1ac;
+  font-family: "Comic Neue", cursive;
+  margin-left: 2px;
 }
 .footer span {
   padding: 0.3em 0.7em;
@@ -30,8 +35,10 @@
 .footer .link {
   color: #dbc1ac;
   text-decoration: none;
+  font-family: "Comic Neue", cursive;
 }
 
 .link:hover {
   color: white;
+  font-family: "Comic Neue", cursive;
 }

@@ -8,9 +8,9 @@ import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import { green } from "@material-ui/core/colors";
-import lightRoastImg from "./homeComponents/snark-light-roast.png";
-import mediumRoastImg from "./homeComponents/snark-medium-roast.png";
-import darkRoastImg from "./homeComponents/snark-dark-roast.png";
+import lightRoastImg from "./assets/snark-light-roast.png";
+import mediumRoastImg from "./assets/snark-medium-roast.png";
+import darkRoastImg from "./assets/snark-dark-roast.png";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,8 +47,8 @@ export default function HomeCards() {
   const roastTypes = ["Light Roast", "Medium Roast", "Dark Roast"];
   const roastTypesUrl = ["light", "medium", "dark"];
   const roastImages = [lightRoastImg, mediumRoastImg, darkRoastImg];
-  //not using history in this case, because history would start the user at the end of shop.
-  //Instead of at the beginning/top of the page
+  //not using history in this case, because history would start the user at the end of shop by default.
+  //Instead of starting them at the beginning/top of the page
   const navTo = (route: string) => (window.location.href = route);
 
   return (
@@ -63,6 +63,7 @@ export default function HomeCards() {
         alignItems="center"
         spacing={6}
       >
+        {/*loop through the list to render a row of cards */}
         {roastTypes.map((roast, index) => {
           return (
             <Grid item key={index}>
@@ -87,7 +88,9 @@ export default function HomeCards() {
                 <CardActions>
                   <Button
                     fullWidth
-                    onClick={() => navTo(`shop/${roastTypesUrl[index]}-roast`)}
+                    onClick={() =>
+                      navTo(`#/shop/${roastTypesUrl[index]}-roast`)
+                    }
                   >
                     <ShoppingCartIcon style={{ color: green[500] }} />
                     Shop

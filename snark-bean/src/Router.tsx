@@ -21,8 +21,8 @@ export default function Router() {
   return (
     <Switch>
       <Route path="/" exact component={Home} />
-      <Route path="/shop/:param?" component={Shop} />
-      <Route path="/blog" exact component={BlogMain} />
+      <Route path="/shop/:param?" exact component={Shop} />
+      <Route path="/blog/:param?" exact component={BlogMain} />
       <Route path="/blog/view/:title" exact component={BlogView} />
       <Route
         path="/signIn"

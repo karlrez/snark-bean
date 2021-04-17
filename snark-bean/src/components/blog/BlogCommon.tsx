@@ -24,7 +24,14 @@ export interface BlogArticle {
   contentHtml: string; // this is raw HTML as a string
 }
 
+export interface Param {
+  param: string;
+}
+
 export const RESULTS_PER_PAGE = 20;
+
+// At the moment Shopify's GraphQL explorer has not yet included the Blog and Article API :(
+// Refer to docs: https://shopify.dev/docs/storefront-api/reference/online-store/article#blog-2021-01
 
 export const GET_BLOG_ARTICLES = gql`
   query blogArticles($first: Int!, $after: String, $query: String) {

@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
 export default function RefundPolicy() {
   const classes = useStyles();
   return (
-    <div className="container">
+    <div className="refund-container">
       <h1 className={classes.title}>Refund Policy</h1>
       <p>
         I want you to be 100% satisfied with your coffee. If you are less than

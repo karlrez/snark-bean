@@ -3,7 +3,6 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 import BlogSearch from "./BlogSearch";
 import BlogCard from "./BlogCard";
@@ -12,11 +11,13 @@ import {
   GET_BLOG_ARTICLES,
   RESULTS_PER_PAGE,
   GET_BLOG_ARTICLES_COUNT,
+  Param,
 } from "./BlogCommon";
 import { useQuery } from "@apollo/client";
 
 import ProgressBar from "../common/CustomProgressbar";
 import Pagination from "../common/Pagination";
+import { useParams } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -32,6 +33,18 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: "none",
     "&:hover": {
       color: theme.palette.background.default,
+      cursor: "pointer",
+    },
+    textTransform: "uppercase",
+    fontWeight: "bold",
+    marginRight: "1.7%",
+  },
+  toolBarLinksSelected: {
+    color: theme.palette.background.paper,
+    textDecoration: "underline",
+    "&:hover": {
+      color: theme.palette.background.default,
+      cursor: "pointer",
     },
     textTransform: "uppercase",
     fontWeight: "bold",
@@ -71,14 +84,14 @@ export default function BlogMain() {
     {
       text: "What Affects Coffee Flavour",
       onSelect: () => {
-        setLabelSelection("Affects");
+        setLabelSelection("What Affects Coffee Flavour");
         setSearchInput("");
       },
     },
     {
       text: "Impress Your Friends",
       onSelect: () => {
-        setLabelSelection("Impress");
+        setLabelSelection("Impress Your Friends");
         setSearchInput("");
       },
     },
@@ -96,29 +109,27 @@ export default function BlogMain() {
   const [searchInput, setSearchInput] = React.useState("");
   const [pageNum, setPageNum] = React.useState(1);
   const [blogList, setBlogList] = React.useState<Array<BlogArticle>>();
+  const { param } = useParams<Param>();
 
   useEffect(() => {
-    // To merge new data for pagination
+    if (param === "what-affects-coffee-flavour")
+      setLabelSelection("What Affects Coffee Flavour");
+  }, []);
+
+  // Fetch again for search bar
+  useEffect(() => {
     const updateQuery = (previousResult: any, { fetchMoreResult }: any) => {
       if (!fetchMoreResult.articles.edges) return;
-
-      const previousEdges = previousResult.articles.edges;
-      const fetchMoreEdges = fetchMoreResult.articles.edges;
-      fetchMoreResult.articles.edges = [...previousEdges, ...fetchMoreEdges];
       return { ...fetchMoreResult };
     };
 
     if (data && fetchMore) {
-      const nextPage = data.articles.pageInfo.hasNextPage;
-      const first = RESULTS_PER_PAGE;
-      const after = data.articles.edges[data.articles.edges.length - 1].cursor;
+      const first = RESULTS_PER_PAGE * pageNum;
       let query = searchInput;
 
-      if (nextPage && after !== null) {
-        fetchMore({ updateQuery, variables: { first, after, query } });
-      }
+      fetchMore({ updateQuery, variables: { first, query } });
     }
-  }, [pageNum]);
+  }, [data, searchInput, labelSelection, pageNum]);
 
   // To get total number of items. Wont work if there are more than 250 items
   // TODO: We would want to keep fetching and merging data until hasNextPage: false.
@@ -136,21 +147,6 @@ export default function BlogMain() {
       fetchMore2({ updateQuery, variables: { first, query } });
     }
   }, [data2, searchInput]);
-
-  // Fetch again for search bar
-  useEffect(() => {
-    const updateQuery = (previousResult: any, { fetchMoreResult }: any) => {
-      if (!fetchMoreResult.articles.edges) return;
-      return { ...fetchMoreResult };
-    };
-
-    if (data && fetchMore) {
-      const first = RESULTS_PER_PAGE;
-      let query = searchInput;
-
-      fetchMore({ updateQuery, variables: { first, query } });
-    }
-  }, [searchInput, labelSelection]);
 
   // This enables filtering when clicking the blog tabs
   // TODO: Ask Kim to add tags to the blogs so we can Filter by "Tag" in the querie
@@ -173,13 +169,13 @@ export default function BlogMain() {
             blogs.includes(article.node.title)
           );
           break;
-        case "Affects":
+        case "What Affects Coffee Flavour":
           blogs = ["How It's Roasted", "Where It Grows", "Roast Levels"];
           dataCopy = dataCopy.filter((article) =>
             blogs.includes(article.node.title)
           );
           break;
-        case "Impress":
+        case "Impress Your Friends":
           blogs = [
             "How to Make the Perfect French Press",
             "Which Has More Caffeine",
@@ -190,12 +186,6 @@ export default function BlogMain() {
           );
           break;
         default:
-      }
-
-      if (searchInput) {
-        dataCopy = dataCopy.filter((article) =>
-          article.node.title.toLowerCase().includes(searchInput.toLowerCase())
-        );
       }
 
       setBlogList(
@@ -221,15 +211,12 @@ export default function BlogMain() {
   };
 
   const onPaginationClick = (event: Object, page: number) => {
-    if (!data || data.articles.edges.length > page * RESULTS_PER_PAGE) {
-      return;
-    }
     setPageNum(page); // changing to trigger the useEffect
   };
 
   return (
     <>
-      {console.log(data2)}
+      {console.log(blogList)}
       <AppBar position="static" className={classes.appBar}>
         <Toolbar>
           <div className={classes.toolBarContainer}>
@@ -237,14 +224,17 @@ export default function BlogMain() {
               {labelList.map((label, index) => {
                 const { text, onSelect } = label;
                 return (
-                  <Link
-                    to="/blog"
-                    className={classes.toolBarLinks}
+                  <div
+                    className={
+                      label.text === labelSelection
+                        ? classes.toolBarLinksSelected
+                        : classes.toolBarLinks
+                    }
                     onClick={onSelect}
                     key={index}
                   >
                     <Typography variant="subtitle2"> {text} </Typography>
-                  </Link>
+                  </div>
                 );
               })}
             </>
@@ -266,16 +256,22 @@ export default function BlogMain() {
         spacing={6}
         className={classes.grid}
       >
-        {blogList
-          ? blogList.map((blog: any, index: any) => {
-              return (
-                <Grid key={index} item>
-                  <BlogCard blogArticle={blog} />
-                </Grid>
-              );
-            })
-          : null}
+        {blogList &&
+          blogList.map((blog: any, index: any) => {
+            return (
+              <Grid key={index} item>
+                <BlogCard blogArticle={blog} />
+              </Grid>
+            );
+          })}
       </Grid>
+
+      {blogList && blogList.length === 0 ? (
+        <Typography variant={"h5"} align={"center"}>
+          Search returned no results
+        </Typography>
+      ) : null}
+
       <Pagination
         onPaginationClick={onPaginationClick}
         resultsPerPage={RESULTS_PER_PAGE}

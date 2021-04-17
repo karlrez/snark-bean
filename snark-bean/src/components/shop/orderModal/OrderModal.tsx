@@ -65,6 +65,7 @@ function SimpleDialog(props: SimpleDialogProps & ItemProps) {
   };
 
   const handleSubmit = () => {
+    console.log(props.item);
     let grindChoices = [
       "Whole Beans",
       "Espresso",
@@ -78,7 +79,7 @@ function SimpleDialog(props: SimpleDialogProps & ItemProps) {
     if (props.item.node.title.includes("Flight")) {
       cartItem = {
         item: props.item,
-        variantID: props.item.node.id, // flights dont have variants, single id
+        variantID: props.item.node.variants.edges[0].node.id, // Flights dont have variants, single id
         quantity: 1,
         weight: "0",
         grind: "",

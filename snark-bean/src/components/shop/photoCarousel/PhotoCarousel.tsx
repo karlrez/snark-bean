@@ -9,22 +9,22 @@ export default function PhotoCarousel() {
     {
       title: "What makes coffee sooo good...",
       image: "1",
-      href: "/blog/view/How%20It's%20Roasted",
+      href: "#/blog/what-affects-coffee-flavour",
     },
     {
       title: "What coffee best suits me?",
       image: "2",
-      href: "/blog/view/Roast%20Levels",
+      href: "#/blog/view/Roast%20Levels",
     },
     {
       title: "Robusta vs Arabica",
       image: "3",
-      href: "/blog/view/Robusta%20vs.%20Arabica",
+      href: "#/blog/view/Robusta%20vs.%20Arabica",
     },
     {
       title: "Where it grows",
       image: "4",
-      href: "/blog/view/Where%20It%20Grows",
+      href: "#/blog/view/Where%20It%20Grows",
     },
   ];
   return (

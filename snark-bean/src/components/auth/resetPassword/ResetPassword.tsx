@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   errorMessage: {
     color: "#c62828",
     fontSize: 16,
-    fontFamily: "bold",
+    fontFamily: theme.typography.fontFamily,
     paddingLeft: "285px",
   },
   reqErrMsg: {
@@ -68,6 +68,7 @@ interface RecoverCustomer {
   };
 }
 
+//define mutation for sending user a reset password email
 const RECOVER_CUSTOMER = gql`
   mutation customerRecover($email: String!) {
     customerRecover(email: $email) {
@@ -80,11 +81,11 @@ const RECOVER_CUSTOMER = gql`
 
 export default function ResetPassword() {
   const classes = useStyles();
-  const signInContext = useDisplayContext();
+  const signInContext = useDisplayContext(); //access the global context
   const history = useHistory();
   const [recoverCustomer, { data }] = useMutation<
     RecoverCustomer,
-    { email: string }
+    { email: string } //pass in expected $email: String! argument to apollo hook
   >(RECOVER_CUSTOMER);
   const {
     register,
@@ -96,7 +97,7 @@ export default function ResetPassword() {
     formValues: FormInputs
   ) => {
     const { email } = formValues; //use object destructuring to access user's data input
-    recoverCustomer({ variables: { email } });
+    recoverCustomer({ variables: { email } }); //execute request to validate email and send reset password email to user
   };
 
   useEffect(() => {

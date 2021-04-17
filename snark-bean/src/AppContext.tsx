@@ -30,6 +30,7 @@ export const AppContext = createContext(Array());
 export const useDisplayContext = () => useContext(DisplayLoginMsg);
 
 export const Provider: React.FC = (props: any) => {
+  // Context cart isnt used yet, but should be used when storing cart for logged in account
   const [contextCart, setContextCart] = useState(Array<CartItem>());
 
   return (

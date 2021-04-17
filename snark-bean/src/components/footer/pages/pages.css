@@ -3,3 +3,14 @@
   text-align: center;
   margin: auto;
 }
+
+.refund-container {
+  width: 50%;
+  text-align: center;
+  margin: auto;
+  margin-bottom: 15%;
+}
+
+p {
+  font-family: "Comic Neue", cursive;
+}

@@ -129,15 +129,18 @@ export default function PrivacyPolicy() {
         residence and you have given us your consent to allow any of your minor
         dependents to use this site.
       </p>
-      SECTION 9 - CHANGES TO THIS PRIVACY POLICY We reserve the right to modify
-      this privacy policy at any time, so please review it frequently. Changes
-      and clarifications will take effect immediately upon their posting on the
-      website. If we make material changes to this policy, we will notify you
-      here that it has been updated, so that you are aware of what information
-      we collect, how we use it, and under what circumstances, if any, we use
-      and/or disclose it. If our store is acquired or merged with another
-      company, your information may be transferred to the new owners so that we
-      may continue to sell products to you.
+      <p>
+        SECTION 9 - CHANGES TO THIS PRIVACY POLICY We reserve the right to
+        modify this privacy policy at any time, so please review it frequently.
+        Changes and clarifications will take effect immediately upon their
+        posting on the website. If we make material changes to this policy, we
+        will notify you here that it has been updated, so that you are aware of
+        what information we collect, how we use it, and under what
+        circumstances, if any, we use and/or disclose it. If our store is
+        acquired or merged with another company, your information may be
+        transferred to the new owners so that we may continue to sell products
+        to you.
+      </p>
       <p>
         QUESTIONS AND CONTACT INFORMATION If you would like to: access, correct,
         amend or delete any personal information we have about you, register a

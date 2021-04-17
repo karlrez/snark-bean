@@ -47,13 +47,14 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "flex-start",
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
+    margin: theme.spacing(2, 0, 2),
   },
   errorMessage: {
     color: "#c62828",
     fontSize: 16,
-    fontFamily: "bold",
-    paddingLeft: "285px",
+    fontFamily: theme.typography.fontFamily,
+    paddingLeft: "230px",
+    marginBottom: theme.spacing(0.5),
   },
   reqErrMsg: {
     marginTop: theme.spacing(1.5),

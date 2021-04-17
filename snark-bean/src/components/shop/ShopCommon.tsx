@@ -28,6 +28,9 @@ export interface Param {
 // To set pagination
 export const RESULTS_PER_PAGE = 20;
 
+// GraphQL explorer is very handy for creating this queries
+// https://shopify.dev/tools/graphiql-admin-api
+
 export const GET_PRODUCTS = gql`
   query products($first: Int!, $after: String, $query: String) {
     products(first: $first, after: $after, query: $query) {

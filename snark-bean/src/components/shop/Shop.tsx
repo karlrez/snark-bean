@@ -17,6 +17,7 @@ import {
   GET_PRODUCTS,
   Param,
 } from "./ShopCommon";
+import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -84,74 +85,55 @@ export default function Shop() {
     if (param === "alert") notify();
   }, []);
 
-  // To load more results for pagination
-  useEffect(() => {
-    // To merge new data for pagination
-    const updateQuery = (previousResult: any, { fetchMoreResult }: any) => {
-      if (!fetchMoreResult.products.edges) return;
-
-      const previousEdges = previousResult.products.edges;
-      const fetchMoreEdges = fetchMoreResult.products.edges;
-      fetchMoreResult.products.edges = [...previousEdges, ...fetchMoreEdges];
-      return { ...fetchMoreResult };
-    };
-
-    if (data && fetchMore) {
-      const nextPage = data.products.pageInfo.hasNextPage;
-      const first = RESULTS_PER_PAGE;
-      const after = data.products.edges[data.products.edges.length - 1].cursor;
-      let query = filterVal;
-      if (searchInput) query = searchInput;
-
-      if (nextPage && after !== null) {
-        fetchMore({ updateQuery, variables: { first, after, query } });
-      }
-    }
-  }, [pageNum]);
-
   // Query again when filter or search input is applied
   useEffect(() => {
-    // To merge new data for pagination
     const updateQuery = (previousResult: any, { fetchMoreResult }: any) => {
       if (!fetchMoreResult.products.edges) return;
-      const fetchMoreEdges = fetchMoreResult.products.edges;
-      fetchMoreResult.products.edges = [...fetchMoreEdges];
       return { ...fetchMoreResult };
     };
 
     if (data && fetchMore) {
-      const first = RESULTS_PER_PAGE;
-      const after = null;
+      const first = RESULTS_PER_PAGE * pageNum;
       let query = filterVal;
       if (searchInput) query = searchInput;
 
-      fetchMore({ updateQuery, variables: { first, after, query } });
+      fetchMore({ updateQuery, variables: { first, query } });
     }
-  }, [data, filterVal, searchInput]);
+  }, [data, filterVal, searchInput, pageNum]);
 
-  // To get total number of items. Wont work if there are more than 250 items
+  // To get total number of items.
+  // TODO: Wont work if there are more than 250 items
+  // Need to make this loop and merge data until hasNextPage: false
+  // But create an arguement for when to not merge data and start over
   useEffect(() => {
-    // To merge new data
     const updateQuery = (previousResult: any, { fetchMoreResult }: any) => {
       if (!fetchMoreResult.products.edges) return;
       return { ...fetchMoreResult };
     };
 
     if (data2 && fetchMore2) {
-      const after = null;
+      const first = 250;
       let query = filterVal;
       if (searchInput) query = searchInput;
 
-      fetchMore2({ updateQuery, variables: { after, query } });
+      fetchMore2({ updateQuery, variables: { first, query } });
     }
   }, [data2, searchInput, filterVal]);
 
   const onPaginationClick = (event: Object, page: number) => {
-    if (!data || data.products.edges.length > page * RESULTS_PER_PAGE) {
-      return;
-    }
     setPageNum(page); // changing to trigger the useEffect
   };
+
+  const notify = () =>
+    toast.info("Please complete checkout opened on the new tab", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
 
   // Method to split an array into groups (using to make rows of three)
   const chunkArrayInGroups = (arr: any[], size: number) => {
@@ -184,20 +166,8 @@ export default function Shop() {
     });
   }
 
-  const notify = () =>
-    toast.info("Please complete checkout opened on the new tab", {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-
   return (
     <>
-      {console.log(filterVal)}
       <div>
         <ToastContainer
           position="top-center"
@@ -221,8 +191,13 @@ export default function Shop() {
         nestedMenu={nestedMenu}
         setSearchInput={setSearchInput}
       />
-      {loading || loading2 ? <ProgressBar color="primary" /> : null}
+      {loading || (loading2 && <ProgressBar color="primary" />)}
       {itemCards}
+      {data && data.products.edges.length === 0 ? (
+        <Typography variant={"h5"} align={"center"}>
+          Search returned no results
+        </Typography>
+      ) : null}
       <Pagination
         onPaginationClick={onPaginationClick}
         resultsPerPage={RESULTS_PER_PAGE}

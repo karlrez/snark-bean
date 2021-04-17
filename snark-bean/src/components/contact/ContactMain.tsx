@@ -3,6 +3,7 @@ import Grid from "@material-ui/core/Grid";
 import ContactForm from "./ContactForm";
 import { makeStyles } from "@material-ui/core/styles";
 import { Paper } from "@material-ui/core";
+import avatarImg from "./contact-avatar.png";
 import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
 
@@ -62,7 +63,7 @@ export default function Contact() {
             <Avatar
               className={classes.avatar}
               alt="Kim Avatar"
-              src="https://images.unsplash.com/photo-1525550557089-27c1bfedd06c?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80"
+              src={avatarImg}
             />
           </div>
           <div>

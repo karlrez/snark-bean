@@ -18,9 +18,9 @@ const httpLink = createHttpLink({
 
 const middlewareLink = setContext(() => ({
   headers: {
-    //Accept: "application/json",
-    //"Content-Type": "application/graphql",
-    //"X-Shopify-Storefront-Access-Token": /* Put access token here */
+    Accept: "application/json",
+    "Content-Type": "application/graphql",
+    "X-Shopify-Storefront-Access-Token": "/*Insert a access token here*/b",
   },
 }));
 

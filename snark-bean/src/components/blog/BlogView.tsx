@@ -1,4 +1,3 @@
-import React from "react";
 import { useParams } from "react-router-dom";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
@@ -8,6 +7,7 @@ import { GET_SINGLE_ARTICLE } from "./BlogCommon";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import ProgressBar from "../common/CustomProgressbar";
+import KimAvatar from "./../contact/contact-avatar.png";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -78,7 +78,7 @@ export default function BlogView() {
         <Avatar
           className={classes.selfAvatar}
           alt="Kim Avatar"
-          src="https://images.unsplash.com/photo-1525550557089-27c1bfedd06c?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80"
+          src={KimAvatar}
         />
         <Typography
           variant="subtitle1"
@@ -92,7 +92,7 @@ export default function BlogView() {
             color="secondary"
             className={classes.author}
           >
-            {date ? "- " + date : null}
+            {date && "- " + date}
           </Typography>
         </Typography>
       </Container>

@@ -16,7 +16,7 @@ export default function DisplayUserErrors(errorCode: string) {
       return "Password is too long (maximum is 40 characters)";
 
     case "UNIDENTIFIED_CUSTOMER":
-      return "No account found with this email";
+      return "No account found with this email and password";
 
     default:
       return "Something went wrong";

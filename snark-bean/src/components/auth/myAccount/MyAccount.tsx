@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Typography from "@material-ui/core/Typography";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import { useTokenValidate } from "../AuthCommon";
@@ -13,6 +12,7 @@ const useStyles = makeStyles((theme) =>
       justifyContent: "center",
       marginRight: theme.spacing(0.5),
       marginTop: theme.spacing(1),
+      marginBottom: theme.spacing(15),
     },
   })
 );

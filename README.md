@@ -1,5 +1,5 @@
 # CST8334 Snark Bean Website
-This project serves as a new website for Snark Bean and integrates their existing Shopify store and blog. 
+This project serves as a new website for Snark Bean and integrates their existing Shopify store and blog. This repository has the API keys removed, but a hosted version can be viewed at: https://snark-bean.web.app/
 
 ## Build the project
 This project is built using React.js and TypeScript. Here are the steps to start the project on a development server:
